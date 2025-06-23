@@ -1,3 +1,31 @@
+/*
+
+server/
+│
+├── app.js                // Entry point
+├── config/
+│   └── db.js             // PostgreSQL connection pool
+│   └── passport.js       // Passport strategies
+│   └── session.js        // Session middleware
+├── middleware/
+│   └── auth.js           // Role guards like ensureAdmin, ensureStudent
+├── routes/
+│   └── auth.js           // Login, register, logout, Google OAuth
+│   └── student.js        // Student-specific routes
+│   └── admin.js          // Admin-specific routes
+│   └── stripe.js         // Stripe payment routes
+├── controllers/
+│   └── authController.js
+│   └── studentController.js
+│   └── adminController.js
+├── utils/
+│   └── validators.js     // express-validator configs
+│   └── devModeConfig.js  // Dev/live config like username min length
+├── data/
+│   └── dummyData.js
+└── .env
+*/
+
 import bcrypt from 'bcrypt';
 import { Pool } from 'pg';
 import express from 'express';
@@ -63,6 +91,7 @@ app.use(
 		cookie: {
 			// maxAge: 24 * 60 * 60 * 1000, // 1 day
 			maxAge: 1 * 20 * 60 * 1000, // 20 min
+			// maxAge: 1 * 1 * 20 * 1000, // 20 sec
 			secure: false, // change to true in production (HTTPS only)
 			sameSite: 'lax', // protects from CSRF; change to 'strict' if needed
 		},
@@ -465,10 +494,10 @@ function ensureStudents(req, res, next) {
 function ensureStudent(req, res, next) {
 	console.log('ensure student');
 	if (req.isAuthenticated()) {
-		console.log('Authenticated user ID:', req.user.id);
+		console.log('Authenticated user ID ho:', req.user.id);
 		console.log('Requested ID:', req.params.id);
 
-		if (!req.user.is_admin && !req.user.is_owner && !req.user.is_provider && String(req.user.id) === String(req.params.id)) {
+		if (req.user.is_student && String(req.user.id) === String(req.params.id)) {
 			console.log('✅ Access granted');
 			return next();
 		}

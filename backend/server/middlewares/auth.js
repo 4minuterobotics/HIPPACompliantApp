@@ -23,14 +23,16 @@ export function ensureStudents(req, res, next) {
 		return res.status(401).json({ error: 'Not authenticated' });
 	}
 
-	const { is_admin, is_owner, is_provider } = req.user;
-	if (!is_admin && !is_owner && !is_provider) return next();
+	const { is_student } = req.user;
+	if (is_student) return next();
 	return res.status(403).json({ error: 'Access denied. Students only.' });
 }
 
 export function ensureStudent(req, res, next) {
+	console.log('ensureStudent middleware called');
 	if (req.isAuthenticated()) {
-		if (!req.user.is_admin && !req.user.is_owner && !req.user.is_provider && String(req.user.id) === String(req.params.id)) {
+		console.log('User is authenticated:', req.user);
+		if (req.user.is_student && String(req.user.id) === String(req.params.id)) {
 			return next();
 		}
 	}

@@ -107,6 +107,8 @@ export async function googleCallbackHandler(req, res) {
 
 export function currentUserHandler(req, res) {
 	if (req.isAuthenticated()) {
+		console.log('🧠 Session content:put session here');
+		console.log('🙍‍♂️ req.user: put user here');
 		return res.json(req.user);
 	}
 	return res.status(401).json({ error: 'Not logged in' });
