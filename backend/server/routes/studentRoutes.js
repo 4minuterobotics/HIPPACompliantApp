@@ -5,6 +5,6 @@ import { ensureStudent } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/student/:id', ensureStudent, getStudentProfile);
+router.get('/:id', ensureStudent, getStudentProfile);
 
 export default router;

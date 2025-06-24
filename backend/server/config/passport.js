@@ -104,7 +104,9 @@ passport.use(
 				const prescriptionResult = await pool.query('SELECT * FROM prescriptions WHERE user_id = $1', [user.id]);
 				user.prescriptions = prescriptionResult.rows.length > 0 ? prescriptionResult.rows[0] : null;
 
-				cb(null, user);
+				//if using MongoDB, attach the mongoUser to the user object
+				// if using postgres, attach the user object to the mongoUser
+				cb(null, mongoUser);
 			} catch (err) {
 				console.error('Error in Google OAuth strategy:', err);
 				await pool.query('INSERT INTO login_attempts (user_id, ip_address, success) VALUES ($1, $2, $3)', [null, 'unknown', false]);
@@ -115,14 +117,31 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+	// console.log('user in serializeUser:', user);
+	// console.log('id of user in serializeUser:', user.id);
+	// done(null, user.rows[0].id);
+	console.log('user in serializeUser:', user);
+	console.log('id of user in serializeUser:', user.id);
+	// done(null, user._id); // Use _id for MongoDB
+	// done(null, user.id); // Use id for Postgres
+	// Assuming user is a MongoDB document, use _id
+	// If using Postgres, use user.id
+	// For MongoDB, you might want to use user._id instead of user.id
+	// If using Postgres, you can use user.id
+	// For MongoDB, you might want to use user._id instead of user.id
+	// If using Postgres, you can use user.id
 	done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
 	try {
-		const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-		if (result.rows.length === 0) return done(null, false);
-		done(null, result.rows[0]);
+		// const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+		// if (result.rows.length === 0) return done(null, false);
+		// done(null, result.rows[0]);
+		console.log('id in deserializeUser:', id);
+		const user = await User.findById(id); // or similar
+		console.log('id of user in deserializeUser:', user.id);
+		done(null, user); // attaches user to req.user
 	} catch (err) {
 		done(err);
 	}

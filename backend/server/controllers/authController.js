@@ -96,8 +96,18 @@ export async function googleCallbackHandler(req, res) {
 			return res.redirect('http://localhost:5173/login?error=userNotFound');
 		}
 
-		const redirectUrl = dbUser.is_admin ? 'http://localhost:5173/admin' : `http://localhost:5173/studentHome/${dbUser._id}`;
+		// const redirectUrl = dbUser.is_admin ? 'http://localhost:5173/admin' : `http://localhost:5173/studentHome/${dbUser.id}`;
+		const redirectUrl = dbUser.is_admin
+			? `http://localhost:5173/admin`
+			: dbUser.is_owner
+			? `http://localhost:5173/owner`
+			: dbUser.is_provider
+			? `http://localhost:5173/provider`
+			: dbUser.is_student
+			? `http://localhost:5173/studentHome/${dbUser.id}`
+			: `http://localhost:5173/login`; // fallback if none match
 
+		console.log('Redirecting to:', redirectUrl);
 		setTimeout(() => res.redirect(redirectUrl), 500);
 	} catch (err) {
 		console.error('OAuth callback exception:', err);
