@@ -1,0 +1,17 @@
+.loading-screen {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-image: url('../../assets/logo-no-bg.png');
+	height: 300px;
+	width: 370px;
+	margin-left: auto;
+	margin-right: auto;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+
+	color: black;
+	z-index: 99999999 important!;
+	/* margin-bottom: auto; */
+}

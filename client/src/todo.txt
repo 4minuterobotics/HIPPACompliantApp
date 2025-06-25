@@ -1,0 +1,5 @@
+make fields on screeningRegistration page required
+
+Navbar, studentHome, studentMenubar, and studentRedirect have versions that work for 
+postgress and versions that work for mongo. automate those 
+values based on an env variable.
