@@ -100,7 +100,7 @@ export async function googleCallbackHandler(req, res) {
 		const redirectUrl = dbUser.is_admin
 			? `http://localhost:5173/admin`
 			: dbUser.is_owner
-			? `http://localhost:5173/owner`
+			? `http://localhost:5173/ownerHome/${dbUser.id}`
 			: dbUser.is_provider
 			? `http://localhost:5173/provider`
 			: dbUser.is_student

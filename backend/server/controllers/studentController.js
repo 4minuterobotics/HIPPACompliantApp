@@ -4,7 +4,7 @@ import { Prescription } from '../models/Prescription.js';
 
 export async function getStudentProfile(req, res) {
 	console.log('Fetching student profile for user ID:', req.params.id);
-	const userId = String(req.params.id);
+	const userId = req.params.id;
 	try {
 		console.log('User ID:', userId);
 		const user = await User.findById(userId);

@@ -18,6 +18,16 @@ export function ensureAdmin(req, res, next) {
 	return res.status(403).json({ error: 'Access denied. Admins only.' });
 }
 
+export function ensureOwner(req, res, next) {
+	console.log('ensureOwner middleware called');
+	if (process.env.DEV_MODE === 'true') return next(); // Dev mode bypass
+	if (req.isAuthenticated() && req.user?.is_owner && String(req.user.id) === String(req.params.ownerId)) {
+		console.log('User is authenticated and is an owner:', req.user);
+		return next();
+	}
+	return res.status(403).json({ error: 'Owners only.' });
+}
+
 export function ensureStudents(req, res, next) {
 	if (!req.isAuthenticated()) {
 		return res.status(401).json({ error: 'Not authenticated' });

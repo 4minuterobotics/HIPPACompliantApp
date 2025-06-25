@@ -11,7 +11,7 @@ import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
-// import ownerRoutes from './routes/ownerRoutes.js';
+import ownerRoutes from './routes/ownerRoutes.js';
 // import providerRoutes from './routes/providerRoutes.js';
 import stripeRoutes from './routes/stripeRoutes.js';
 
@@ -39,7 +39,7 @@ if (process.env.NODE_ENV !== 'development') {
 app.use('/api', authRoutes);
 app.use('/api/admin', adminRoutes);
 // app.use('/api/provider', providerRoutes);
-// app.use('/api/owner', ownerRoutes);
+app.use('/api/owner', ownerRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/', stripeRoutes); // Stripe doesn't use /api
 
